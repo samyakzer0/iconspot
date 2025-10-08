@@ -1,5 +1,5 @@
 // API configuration for different environments
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://iconspot-2.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export const API_ENDPOINTS = {
   GENERATE_ICONS: `${API_BASE_URL}/api/icons/generate`,

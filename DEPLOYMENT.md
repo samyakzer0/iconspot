@@ -2,12 +2,40 @@
 
 This guide explains how to deploy IconSpot to Vercel (frontend) and Render (backend).
 
-## 🚀 Current Deployment Status
+## Backend Deployment (Render)
 
-**✅ Backend Already Deployed:**
-- **URL**: https://iconspot-2.onrender.com/
-- **Status**: Active and running
-- **Health Check**: https://iconspot-2.onrender.com/health
+### Step 1: Deploy to Render
+
+1. **Create a Render Account**: Sign up at [render.com](https://render.com)
+
+2. **Create New Web Service**:
+   - Connect your GitHub repository
+   - Select the repository containing your IconSpot backend code
+
+3. **Configure Service**:
+   - **Name**: `iconspot-backend` (or your preferred name)
+   - **Runtime**: `Node.js`
+   - **Build Command**: `cd backend && npm install`
+   - **Start Command**: `cd backend && npm start`
+   - **Port**: `3001`
+
+### Step 2: Set Environment Variables in Render
+
+In your Render dashboard, go to your service's environment variables and add:
+
+```bash
+NODE_ENV=production
+FRONTEND_URL=https://your-vercel-app.vercel.app
+PERPLEXITY_API_KEY=your_perplexity_api_key
+GOOGLE_API_KEY=your_google_api_key
+REMOVE_BG_API_KEY=your_remove_bg_api_key
+```
+
+### Step 3: Deploy
+
+- Click "Create Web Service"
+- Render will automatically build and deploy your backend
+- Note the provided URL (e.g., `https://your-backend.onrender.com`)
 
 ## Frontend Deployment (Vercel)
 
@@ -31,7 +59,7 @@ This guide explains how to deploy IconSpot to Vercel (frontend) and Render (back
 In your Vercel dashboard, go to your project's settings and add:
 
 ```bash
-VITE_API_URL=https://iconspot-2.onrender.com
+VITE_API_URL=https://your-render-backend-url.onrender.com
 ```
 
 ### Step 3: Deploy
@@ -40,35 +68,27 @@ VITE_API_URL=https://iconspot-2.onrender.com
 - Vercel will automatically build and deploy your frontend
 - Note the provided URL (e.g., `https://your-app.vercel.app`)
 
-## Backend Configuration (Render)
-
-Your backend is already deployed at https://iconspot-2.onrender.com/
-
-### Environment Variables (Already Set in Render):
-
-```bash
-NODE_ENV=production
-FRONTEND_URL=https://your-vercel-app.vercel.app  # Update this after Vercel deployment
-PERPLEXITY_API_KEY=your_perplexity_api_key
-GOOGLE_API_KEY=your_google_api_key
-REMOVE_BG_API_KEY=your_remove_bg_api_key
-```
-
 ## Post-Deployment Steps
 
 ### Update CORS Configuration
 
-After your Vercel deployment is complete:
+After deployment, update your Render backend's `FRONTEND_URL` environment variable with your actual Vercel URL:
 
-1. **Get your Vercel URL** (e.g., `https://your-app.vercel.app`)
-2. **Update Render Environment Variable**:
-   - Go to your Render dashboard
-   - Update `FRONTEND_URL` to your actual Vercel URL
-   - Trigger a manual redeploy if needed
+```
+FRONTEND_URL=https://your-app.vercel.app
+```
 
-### API Keys Setup
+### Update Vercel Environment Variable
 
-You'll need to set these API keys in your Render dashboard:
+Update your Vercel project's `VITE_API_URL` with your actual Render backend URL:
+
+```
+VITE_API_URL=https://your-backend.onrender.com
+```
+
+## API Keys Setup
+
+You'll need to obtain these API keys for full functionality:
 
 1. **Perplexity API Key**:
    - Sign up at [perplexity.ai](https://perplexity.ai)
@@ -85,52 +105,32 @@ You'll need to set these API keys in your Render dashboard:
    - Go to API settings
    - Generate a new API key
 
-## Testing Your Deployment
-
-1. **Backend Health Check**:
-   ```
-   https://iconspot-2.onrender.com/health
-   ```
-
-2. **Frontend Test**:
-   ```
-   https://your-app.vercel.app
-   ```
-
 ## Troubleshooting
 
 ### Common Issues
 
 1. **CORS Errors**:
-   - Ensure `FRONTEND_URL` in Render matches your Vercel deployment URL exactly
+   - Ensure `FRONTEND_URL` in Render matches your Vercel deployment URL
    - Check that the URL includes `https://`
 
 2. **API Key Errors**:
-   - Verify all API keys are correctly set in Render dashboard
+   - Verify all API keys are correctly set in both Render and Vercel
    - Check API key formats and ensure they're not expired
 
 3. **Build Failures**:
    - Ensure all dependencies are in `package-lock.json`
    - Check Node.js version compatibility
 
-## File Structure
+### Health Check
 
-```
-IconSpot/
-├── src/                    # Frontend React app
-│   ├── components/         # React components
-│   ├── lib/
-│   │   └── api.js         # API configuration
-│   └── pages/             # Page components
-├── backend/               # Backend Node.js app
-│   ├── controllers/       # Route controllers
-│   ├── routes/           # API routes
-│   ├── services/         # Business logic services
-│   └── server.js         # Main server file
-├── render.yaml           # Render deployment config
-├── vercel.json          # Vercel deployment config
-└── package.json         # Frontend dependencies
-```
+- Backend: Visit `https://your-backend.onrender.com/health`
+- Frontend: Visit `https://your-app.vercel.app`
+
+## Cost Optimization
+
+- **Render**: Consider upgrading to paid plan for better performance
+- **API Costs**: Monitor usage of Perplexity, Google AI, and Remove.bg APIs
+- **Database**: Consider adding a database for production icon storage
 
 ## Support
 

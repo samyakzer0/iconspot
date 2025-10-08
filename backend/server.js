@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 3001;
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  'https://iconspot-2.onrender.com',
   process.env.FRONTEND_URL,
   process.env.NODE_ENV === 'production' ? process.env.VITE_FRONTEND_URL : null
 ].filter(Boolean);
@@ -26,7 +25,6 @@ app.use(cors({
       return callback(null, true);
     } else {
       console.log('Blocked CORS request from origin:', origin);
-      console.log('Allowed origins:', allowedOrigins);
       return callback(new Error('Not allowed by CORS'));
     }
   },
