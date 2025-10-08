@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: iconspot-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    port: 3001
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false # Will be set in Render dashboard
+      - key: PERPLEXITY_API_KEY
+        sync: false # Will be set in Render dashboard
+      - key: GOOGLE_API_KEY
+        sync: false # Will be set in Render dashboard
+      - key: REMOVE_BG_API_KEY
+        sync: false # Will be set in Render dashboard
