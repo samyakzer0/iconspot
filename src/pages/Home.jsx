@@ -6,6 +6,21 @@ import StyleSelector from "../components/iconspot/StyleSelector";
 import IconGrid from "../components/iconspot/IconGrid";
 import IconResult from "../components/iconspot/IconResult";
 
+// Make test function available globally for debugging
+if (typeof window !== 'undefined') {
+  window.testIconSpotConnectivity = async () => {
+    const { testConnectivity } = await import('../lib/api.js');
+    try {
+      const result = await testConnectivity();
+      console.log('✅ Connectivity test successful:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ Connectivity test failed:', error);
+      throw error;
+    }
+  };
+}
+
 export default function Home() {
   const [selectedStyle, setSelectedStyle] = useState(null);
   const [context, setContext] = useState("");
