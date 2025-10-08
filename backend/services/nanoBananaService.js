@@ -20,8 +20,10 @@ console.log('   Starts with AIza:', process.env.GOOGLE_API_KEY?.startsWith('AIza
 // Validate API key exists
 if (!process.env.GOOGLE_API_KEY) {
   console.error('❌ GOOGLE_API_KEY not found!');
-  console.error('   Check that .env file exists at:', path.join(__dirname, '../.env'));
-  console.error('   File should contain: GOOGLE_API_KEY=AIzaSyC...');
+  console.error('   Current environment variables:');
+  console.error('   - NODE_ENV:', process.env.NODE_ENV);
+  console.error('   - FRONTEND_URL:', process.env.FRONTEND_URL);
+  console.error('   - Available env vars:', Object.keys(process.env).filter(key => key.includes('API')));
 }
 
 // Initialize Google GenAI client

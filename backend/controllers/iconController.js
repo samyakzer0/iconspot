@@ -8,15 +8,24 @@ import path from 'path';
 const generatedIcons = new Map();
 
 export const generateIcons = async (req, res) => {
-  try {
-    const { style, context } = req.body;
+   try {
+     const { style, context } = req.body;
 
-    if (!style || !context) {
-      return res.status(400).json({
-        error: 'Missing required fields',
-        message: 'Style and context are required'
-      });
-    }
+     if (!style || !context) {
+       return res.status(400).json({
+         error: 'Missing required fields',
+         message: 'Style and context are required'
+       });
+     }
+
+     // Check if required API keys are available
+     if (!process.env.GOOGLE_API_KEY || !process.env.PERPLEXITY_API_KEY) {
+       console.error('❌ Missing API keys in environment');
+       return res.status(500).json({
+         error: 'Server configuration error',
+         message: 'Required API keys are not configured. Please contact support.'
+       });
+     }
 
     console.log(`🎨 Generating icons for style: ${style}, context: ${context}`);
 

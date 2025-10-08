@@ -26,15 +26,31 @@ export const apiCall = async (url, options = {}) => {
   };
 
   try {
+    console.log('🚀 Making API call to:', url);
+    console.log('📋 Request options:', finalOptions);
+
     const response = await fetch(url, finalOptions);
 
+    console.log('📡 Response status:', response.status);
+    console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('❌ API Error Response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log('✅ API Response:', data);
+    return data;
   } catch (error) {
-    console.error('API call failed:', error);
+    console.error('💥 API call failed:', error);
+
+    // If it's a network error, provide more specific error message
+    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+      throw new Error('Network error: Unable to connect to server. Please check if the server is running.');
+    }
+
     throw error;
   }
 };
