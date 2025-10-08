@@ -1,0 +1,23 @@
+# IconSpot Backend Deployment to Render
+# Your backend is deployed at: https://iconspot-2.onrender.com/
+
+services:
+  - type: web
+    name: iconspot-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm run start:backend
+    port: 3001
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false # Set to your Vercel URL after deployment
+      - key: PERPLEXITY_API_KEY
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: REMOVE_BG_API_KEY
+        sync: false
