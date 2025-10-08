@@ -18,17 +18,6 @@
       "dest": "index.html"
     }
   ],
-  "headers": [
-    {
-      "source": "/assets/.*\\.(js|css|woff|woff2)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    }
-  ],
   "env": {
     "NODE_ENV": "production"
   }
