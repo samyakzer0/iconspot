@@ -19,14 +19,13 @@ export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/icons/generate-high-quality', {
+      const { apiCall, API_ENDPOINTS } = await import('../../lib/api.js');
+      const response = await apiCall(API_ENDPOINTS.GENERATE_HIGH_QUALITY, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           iconId,
-          selectedVariationIndex: iconIndex
+          selectedVariationIndex: iconIndex,
+          skipGeneration: true // Skip generation and use selected variation directly
         }),
       });
 
@@ -53,7 +52,8 @@ export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
     if (!iconId) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/api/icons/download/${iconId}`);
+      const { API_ENDPOINTS } = await import('../../lib/api.js');
+      const response = await fetch(API_ENDPOINTS.DOWNLOAD_ICON(iconId));
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

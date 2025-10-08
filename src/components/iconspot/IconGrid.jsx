@@ -20,11 +20,9 @@ export default function IconGrid({ style, context, onIconSelect, onStartOver, on
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/icons/generate', {
+      const { apiCall, API_ENDPOINTS } = await import('../../lib/api.js');
+      const response = await apiCall(API_ENDPOINTS.GENERATE_ICONS, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ style, context }),
       });
 
