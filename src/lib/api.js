@@ -1,5 +1,21 @@
 // API configuration for different environments
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://iconspot-2.onrender.com';
+const getApiBaseUrl = () => {
+  const viteApiUrl = import.meta.env.VITE_API_URL;
+
+  if (viteApiUrl) {
+    // Ensure the URL has a protocol
+    if (viteApiUrl.startsWith('http://') || viteApiUrl.startsWith('https://')) {
+      return viteApiUrl;
+    } else {
+      // Add https protocol if missing
+      return `https://${viteApiUrl}`;
+    }
+  }
+
+  return 'https://iconspot-2.onrender.com';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const API_ENDPOINTS = {
   GENERATE_ICONS: `${API_BASE_URL}/api/icons/generate`,
@@ -27,6 +43,8 @@ export const apiCall = async (url, options = {}) => {
 
   try {
     console.log('🚀 Making API call to:', url);
+    console.log('🔍 API_BASE_URL:', API_BASE_URL);
+    console.log('🌍 Current origin:', window.location.origin);
     console.log('📋 Request method:', finalOptions.method || 'GET');
 
     // Test basic connectivity first
