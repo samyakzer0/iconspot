@@ -66,6 +66,23 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Healthicons endpoint for Google GenAI library compatibility
+app.post('/healthicons/generate', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Healthicons endpoint available',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/healthicons/generate', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Healthicons endpoint available',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Debug endpoint to check environment
 app.get('/debug', (req, res) => {
   res.json({
