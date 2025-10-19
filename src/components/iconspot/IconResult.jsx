@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, RotateCcw, CheckCircle, Loader2 } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "@/lib/api";
 
 export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
   const [finalIcon, setFinalIcon] = useState(null);
@@ -19,8 +20,7 @@ export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
     setError(null);
 
     try {
-      const { apiCall, API_ENDPOINTS } = await import('../../lib/api.js');
-      const response = await apiCall(API_ENDPOINTS.GENERATE_HIGH_QUALITY, {
+      const data = await apiCall(API_ENDPOINTS.GENERATE_HIGH_QUALITY, {
         method: 'POST',
         body: JSON.stringify({
           iconId,
@@ -29,16 +29,11 @@ export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
+      if (data && data.success) {
         setFinalIcon(data.finalIcon);
       } else {
-        throw new Error(data.message || 'Failed to generate high-quality icon');
+        const msg = data && data.message ? data.message : 'Failed to generate high-quality icon';
+        throw new Error(msg);
       }
     } catch (error) {
       console.error('Error generating high-quality icon:', error);
@@ -52,8 +47,8 @@ export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
     if (!iconId) return;
 
     try {
-      const { API_ENDPOINTS } = await import('../../lib/api.js');
-      const response = await fetch(API_ENDPOINTS.DOWNLOAD_ICON(iconId));
+      const downloadUrl = API_ENDPOINTS.DOWNLOAD_ICON(iconId);
+      const response = await fetch(downloadUrl);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -71,7 +66,7 @@ export default function IconResult({ style, iconIndex, iconId, onStartOver }) {
       document.body.removeChild(a);
     } catch (error) {
       console.error('Error downloading icon:', error);
-      alert('Failed to download icon: ' + error.message);
+      alert('Failed to download icon: ' + (error && error.message ? error.message : error));
     }
   };
   return (

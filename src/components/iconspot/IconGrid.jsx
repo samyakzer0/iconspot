@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RotateCcw, CheckCircle2, Loader2 } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "@/lib/api";
 
 export default function IconGrid({ style, context, onIconSelect, onStartOver, onIconIdGenerated }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -20,25 +21,20 @@ export default function IconGrid({ style, context, onIconSelect, onStartOver, on
     setError(null);
 
     try {
-      const { apiCall, API_ENDPOINTS } = await import('../../lib/api.js');
-      const response = await apiCall(API_ENDPOINTS.GENERATE_ICONS, {
+      const data = await apiCall(API_ENDPOINTS.GENERATE_ICONS, {
         method: 'POST',
         body: JSON.stringify({ style, context }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        setIcons(data.variations);
-        if (onIconIdGenerated) {
+      // Expect the API wrapper to return parsed JSON. Validate shape.
+      if (data && data.success) {
+        setIcons(data.variations || []);
+        if (onIconIdGenerated && data.iconId) {
           onIconIdGenerated(data.iconId);
         }
       } else {
-        throw new Error(data.message || 'Failed to generate icons');
+        const msg = data && data.message ? data.message : 'Failed to generate icons';
+        throw new Error(msg);
       }
     } catch (error) {
       console.error('Error generating icons:', error);

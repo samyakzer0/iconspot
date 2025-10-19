@@ -47,14 +47,16 @@ export const apiCall = async (url, options = {}) => {
     console.log('🌍 Current origin:', window.location.origin);
     console.log('📋 Request method:', finalOptions.method || 'GET');
 
-    // Test basic connectivity first
+    // Prefer explicit health endpoint rather than string replace which can
+    // accidentally merge path segments (e.g. '/api/icons' -> '/healthicons').
     try {
-      console.log('🔍 Testing server connectivity...');
-      const testResponse = await fetch(url.replace('/api/', '/health'), {
+      console.log('🔍 Testing server connectivity via health endpoint...');
+      const healthUrl = `${API_BASE_URL}/health`;
+      const testResponse = await fetch(healthUrl, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
-      console.log('🏥 Health check status:', testResponse.status);
+      console.log('🏥 Health check status:', testResponse.status, '->', healthUrl);
     } catch (testError) {
       console.error('❌ Health check failed:', testError.message);
       throw new Error(`Server not accessible: ${testError.message}`);
